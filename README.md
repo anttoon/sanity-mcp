@@ -37,8 +37,8 @@ sanity-mcp-server
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/sanity-mcp-server.git
-cd sanity-mcp-server
+git clone https://github.com/anttoon/sanity-mcp.git
+cd sanity-mcp
 
 # Install dependencies
 npm install
@@ -54,7 +54,7 @@ npm start
 
 ```bash
 # Run with Docker
-docker run -it --env-file .env yourusername/sanity-mcp-server
+docker run -it --env-file .env anttoon/sanity-mcp-server
 
 # Or build and run locally
 docker build -t sanity-mcp-server .
@@ -100,7 +100,7 @@ SANITY_API_VERSION=your_sanity_api_version
   "mcpServers": {
     "sanity": {
       "command": "docker",
-      "args": ["run", "--rm", "-i", "yourusername/sanity-mcp-server"],
+      "args": ["run", "--rm", "-i", "anttoon/sanity-mcp-server"],
       "env": {
         "SANITY_TOKEN": "your_sanity_api_token",
         "SANITY_PROJECT_ID": "your_sanity_project_id",
@@ -193,4 +193,4 @@ MIT
 
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [Sanity.io](https://www.sanity.io/)
-- [GitHub Repository](https://github.com/yourusername/sanity-mcp-server)
+- [GitHub Repository](https://github.com/anttoon/sanity-mcp)
