@@ -1,145 +1,69 @@
 # Sanity MCP Server
 
-An implementation of the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for Sanity.io.
+A Model Context Protocol (MCP) server for interacting with Sanity.io content management system.
 
-## Overview
+## 🌟 Overview
 
-This server implements the MCP protocol using stdio transport, making it suitable for direct integration with LLM assistants that support the MCP protocol. The server provides tools for interacting with Sanity's content management system.
+This server implements the Model Context Protocol (MCP) to provide Large Language Models (LLMs) with secure, controlled access to Sanity.io's content management system. It enables AI assistants to query, create, update, and manage content in Sanity through a standardized interface.
 
-## Technical Details
+## 🔧 Features
 
-- Built with TypeScript for type safety and better developer experience
-- Uses Vitest for testing, with better ES Modules support
-- Implements controllers for various Sanity.io features:
-  - `actions.ts`: Document publishing and unpublishing operations
-  - `embeddings.ts`: Embeddings and semantic search
-  - `groq.ts`: GROQ queries and real-time updates
-  - `mutate.ts`: Document mutations and modifications
-  - `releases.ts`: Content release management
-  - `schema.ts`: Schema type information
-  - `tools.ts`: Tool definitions for MCP
+- **GROQ Queries**: Execute GROQ queries and subscribe to real-time updates
+- **Document Management**: Create, read, update, and delete documents
+- **Content Publishing**: Publish and unpublish documents
+- **Release Management**: Create and manage content releases
+- **Schema Inspection**: List and inspect schema types
+- **Embeddings**: Perform semantic search on embeddings indices
+- **Project Management**: List organizations, projects, and studios
 
-## Available Tools
+## 🚀 Installation
 
-The server provides the following tools:
+### NPX (Recommended)
 
-- **GROQ Queries**
-  - `query`: Executes GROQ queries (formerly `searchContent`)
-  - `subscribeToUpdates`: Subscribes to real-time updates for documents
-  - `getGroqSpecification`: Gets the GROQ query language specification
-
-- **Document Retrieval**
-  - `getDocument`: Gets a document by ID or multiple documents by their IDs
-  - `getDocuments`: Gets multiple documents by their IDs (alternative to using `getDocument` with an array)
-
-- **Document Mutations**
-  - `createDocument`: Creates a new document
-  - `updateDocument`: Updates one or more existing documents
-  - `mutateDocument`: Performs multiple operations on a single document
-  - `deleteDocument`: Deletes one or more documents
-  - `batchMutations`: Performs multiple mutations across different documents
-  - `updatePortableText`: Updates Portable Text fields (formerly `modifyPortableTextField`)
-
-- **Document Actions**
-  - `publishDocument`: Publishes one or more documents
-  - `unpublishDocument`: Unpublishes one or more documents
-  - `createRelease`: Creates a new content release
-  - `addDocumentToRelease`: Adds a document to a content release
-  - `removeDocumentFromRelease`: Removes one or more documents from a content release
-  - `listReleaseDocuments`: Lists documents in a release
-  - `createDocumentVersion`: Creates a version of one or more documents in a specific release
-  - `unpublishDocumentWithRelease`: Marks one or more documents for unpublishing when a release is published
-
-- **Schema Management**
-  - `listSchemaTypes`: Lists available schema types
-  - `getTypeSchema`: Gets detailed schema for a specific type
-
-- **Embeddings and Semantic Search**
-  - `semanticSearch`: Performs semantic search on embeddings indices
-  - `listEmbeddingsIndices`: Lists available embeddings indices
-
-- **Project Management**
-  - `listOrganizationsAndProjects`: Lists all organizations and their projects
-  - `listStudios`: Lists all studios for a specific project
-
-## Installation
+Run directly without installation:
 
 ```bash
+npx sanity-mcp-server
+```
+
+### Global Installation
+
+```bash
+npm install -g sanity-mcp-server
+sanity-mcp-server
+```
+
+### Local Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/sanity-mcp-server.git
+cd sanity-mcp-server
+
+# Install dependencies
 npm install
-```
 
-## Building and Running
-
-This project is built with TypeScript. To compile the TypeScript files to JavaScript:
-
-```bash
+# Build the project
 npm run build
-```
 
-### Development Mode
-
-Start the development server with automatic recompilation and restart on changes:
-
-```bash
-npm run dev
-```
-
-This uses `tsc -w` to watch TypeScript files and recompile them when they change, plus `node --watch` to restart the server when the compiled JavaScript changes.
-
-### Production Mode
-
-For production or regular usage:
-
-```bash
-npm run build
+# Run the server
 npm start
 ```
 
-## Usage
-
-### Using as a direct command line tool
+### Docker
 
 ```bash
-npm start
+# Run with Docker
+docker run -it --env-file .env yourusername/sanity-mcp-server
+
+# Or build and run locally
+docker build -t sanity-mcp-server .
+docker run -it --env-file .env sanity-mcp-server
 ```
 
-Or after building:
+## ⚙️ Configuration
 
-```bash
-node dist/index.js
-```
-
-### Integration with AI assistants
-
-The server can be integrated with AI assistants that support the MCP protocol. It uses stdio transport (standard input/output) to communicate.
-
-To see an example of how to integrate with the MCP client, check out the `usage-example.ts` file.
-
-#### Claude AI Configuration Example
-
-For Anthropic's Claude AI, you can configure it to use this MCP server by adding the following to your Claude configuration:
-
-```json
-{
-  "tools": [
-    {
-      "name": "sanity-mcp",
-      "type": "mcp",
-      "path": "/path/to/sanity-mcp-server/dist/index.js",
-      "env": {
-        "SANITY_TOKEN": "your_sanity_api_token",
-        "SANITY_PROJECT_ID": "your_sanity_project_id",
-        "SANITY_DATASET": "your_sanity_dataset",
-        "SANITY_API_VERSION": "2025-03-15"
-      }
-    }
-  ]
-}
-```
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
+Create a `.env` file with the following variables:
 
 ```
 SANITY_TOKEN=your_sanity_api_token
@@ -148,28 +72,125 @@ SANITY_DATASET=your_sanity_dataset
 SANITY_API_VERSION=your_sanity_api_version
 ```
 
-## Development
+## 🔌 Integration with Claude AI
+
+### Basic Configuration
+
+```json
+{
+  "mcpServers": {
+    "sanity": {
+      "command": "npx",
+      "args": ["-y", "sanity-mcp-server"],
+      "env": {
+        "SANITY_TOKEN": "your_sanity_api_token",
+        "SANITY_PROJECT_ID": "your_sanity_project_id",
+        "SANITY_DATASET": "your_sanity_dataset",
+        "SANITY_API_VERSION": "2025-03-15"
+      }
+    }
+  }
+}
+```
+
+### Using Docker
+
+```json
+{
+  "mcpServers": {
+    "sanity": {
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "yourusername/sanity-mcp-server"],
+      "env": {
+        "SANITY_TOKEN": "your_sanity_api_token",
+        "SANITY_PROJECT_ID": "your_sanity_project_id",
+        "SANITY_DATASET": "your_sanity_dataset",
+        "SANITY_API_VERSION": "2025-03-15"
+      }
+    }
+  }
+}
+```
+
+## 🛠️ Available Tools
+
+### GROQ Queries
+- `query`: Execute GROQ queries
+- `subscribeToUpdates`: Subscribe to real-time updates
+- `getGroqSpecification`: Get GROQ language specification
+
+### Document Retrieval
+- `getDocument`: Get document(s) by ID
+- `getDocuments`: Get multiple documents by IDs
+
+### Document Mutations
+- `createDocument`: Create a new document
+- `updateDocument`: Update existing document(s)
+- `mutateDocument`: Perform multiple operations on a document
+- `deleteDocument`: Delete document(s)
+- `batchMutations`: Perform multiple mutations across documents
+- `updatePortableText`: Update Portable Text fields
+
+### Document Actions
+- `publishDocument`: Publish document(s)
+- `unpublishDocument`: Unpublish document(s)
+- `createRelease`: Create a content release
+- `addDocumentToRelease`: Add document to a release
+- `removeDocumentFromRelease`: Remove document(s) from a release
+- `listReleaseDocuments`: List documents in a release
+- `createDocumentVersion`: Create document version(s) in a release
+- `unpublishDocumentWithRelease`: Mark document(s) for unpublishing
+
+### Schema Management
+- `listSchemaTypes`: List available schema types
+- `getTypeSchema`: Get detailed schema for a type
+
+### Embeddings and Semantic Search
+- `semanticSearch`: Perform semantic search on embeddings
+- `listEmbeddingsIndices`: List available embeddings indices
+
+### Project Management
+- `listOrganizationsAndProjects`: List organizations and projects
+- `listStudios`: List studios for a project
+
+## 💻 Development
 
 ### Project Structure
 
-The project is organized as follows:
+```
+sanity-mcp-server/
+├── config/            # Configuration files for tools
+├── src/
+│   ├── controllers/   # Feature controllers
+│   ├── types/         # TypeScript type definitions
+│   ├── utils/         # Utility functions
+│   └── index.ts       # Entry point
+├── test/              # Test files
+└── scripts/           # Development scripts
+```
 
-- `src/`: Source code
-  - `controllers/`: Controller modules for different Sanity features
-  - `types/`: TypeScript type definitions
-  - `utils/`: Utility functions
-  - `config/`: Configuration files
-- `config/`: Configuration files for development tools
-  - `.eslintrc.json`: ESLint configuration
-  - `.eslintignore`: Files to ignore in ESLint
-  - `tsconfig.test.json`: TypeScript configuration for tests
-- `scripts/`: Development and build scripts
-- `test/`: Test files
-  - `unit/`: Unit tests
-  - `integration/`: Integration tests
-- `schemas/`: Sanity schema files (not tracked in version control)
+### Development Commands
 
+```bash
+# Start development server with auto-reload
+npm run dev
 
-## License
+# Run tests
+npm test
+
+# Lint code
+npm run lint
+
+# Build for production
+npm run build
+```
+
+## 📄 License
 
 MIT
+
+## 🔗 Links
+
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Sanity.io](https://www.sanity.io/)
+- [GitHub Repository](https://github.com/yourusername/sanity-mcp-server)

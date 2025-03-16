@@ -4,8 +4,11 @@
   "description": "Model Context Protocol server for Sanity.io",
   "main": "dist/index.js",
   "type": "module",
+  "bin": {
+    "sanity-mcp-server": "./dist/index.js"
+  },
   "scripts": {
-    "build": "tsc --project config/tsconfig.json",
+    "build": "tsc --project config/tsconfig.json && chmod +x dist/index.js",
     "start": "node dist/index.js",
     "dev": "tsc --project config/tsconfig.json --watch & nodemon --watch dist dist/index.js",
     "test": "npm run typecheck && npm run test:unit && npm run test:integration",
@@ -23,7 +26,9 @@
     "typecheck:all": "tsc --noEmit --project config/tsconfig.json",
     "prerelease": "npm run test:integration",
     "release": "npm run build && npm version patch && git push",
-    "prepare": "husky",
+    "prepare": "husky && npm run build",
+    "docker:build": "docker build -t sanity-mcp-server .",
+    "docker:run": "docker run -p 3000:3000 --env-file .env sanity-mcp-server",
     "debug-github-ci": "./scripts/debug-github-ci.sh",
     "debug-github-ci:integration": "./scripts/debug-github-ci.sh --job integration-tests",
     "debug-github-ci:critical": "./scripts/debug-github-ci.sh --job critical-integration-tests",
@@ -47,9 +52,6 @@
     "openai": "^4.28.0",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.3"
-  },
-  "bin": {
-    "sanity-mcp-server": "./dist/index.js"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -77,5 +79,21 @@
     "typhonjs-escomplex": "^0.1.0",
     "uuid": "^11.1.0",
     "vitest": "^3.0.7"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "sanity",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "llm",
+    "claude",
+    "anthropic"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sanity-mcp-server.git"
   }
 }

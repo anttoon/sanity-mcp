@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  sanity-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sanity-mcp-server:latest
+    container_name: sanity-mcp-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    # If you need to expose a port (for HTTP transport)
+    # ports:
+    #   - "3000:3000"
+    # For stdio transport, you typically don't need to expose ports
+    stdin_open: true
+    tty: true 
